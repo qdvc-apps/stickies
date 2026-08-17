@@ -1,0 +1,105 @@
+/* ==========================================================================
+   modal.css — dialogs. Plate-coloured, squared off, no drama.
+   ========================================================================== */
+
+.scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 800;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 22px;
+  background: rgba(11, 22, 23, .58);
+}
+.scrim[data-open="true"] { display: flex; }
+
+.sheet {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 660px;
+  max-height: 100%;
+  background: var(--plate);
+  border: 1px solid #9d9683;
+  border-radius: var(--radius);
+  box-shadow: 0 30px 70px -20px rgba(0, 0, 0, .8);
+  overflow: hidden;
+}
+.sheet--narrow { max-width: 430px; }
+
+.sheet__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 9px 10px 9px 14px;
+  background: linear-gradient(#dfd9c8, #cfc8b5);
+  border-bottom: 1px solid #b3ab98;
+}
+.sheet__title {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+}
+.sheet__close {
+  display: grid;
+  place-items: center;
+  width: 22px; height: 22px;
+  font-size: 15px;
+  line-height: 1;
+  border: 1px solid var(--plate-edge);
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, .5);
+}
+.sheet__close:hover { background: var(--danger); border-color: #8e2c22; color: #fff; }
+
+.sheet__body { padding: 18px; overflow: auto; }
+.sheet__body p { margin: 0 0 10px; font-size: 13.5px; line-height: 1.5; }
+.sheet__body p:last-child { margin-bottom: 0; }
+
+.sheet__foot {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 12px 14px;
+  background: #e3ddcc;
+  border-top: 1px solid var(--plate-edge);
+}
+.sheet__foot .sheet__note {
+  margin-right: auto;
+  font-family: var(--face-meta);
+  font-size: 11px;
+  color: var(--ink-faint);
+}
+
+/* Toast: brief confirmation, bottom centre. */
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 20px;
+  z-index: 900;
+  transform: translate(-50%, 14px);
+  padding: 8px 16px;
+  background: var(--plate);
+  border: 1px solid #a9a189;
+  border-radius: var(--radius);
+  box-shadow: var(--lift-high);
+  font-size: 13px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 160ms ease, transform 160ms ease;
+}
+.toast[data-open="true"] { opacity: 1; transform: translate(-50%, 0); }
+
+/* Import sheet has two faces: a summary, or an explanation of why not. */
+#sheet-import [data-import-ready],
+#sheet-import [data-import-fail] { display: none; }
+#sheet-import[data-state="ready"] [data-import-ready] { display: block; }
+#sheet-import[data-state="error"] [data-import-fail] { display: block; }
+#sheet-import[data-state="error"] [data-import-action] { display: none; }
+#sheet-import .readout b { display: block; }
+#sheet-import .slab__title { font-family: var(--face-meta); font-size: 12px; word-break: break-all; }

@@ -1,0 +1,160 @@
+/* ==========================================================================
+   board.css — the mat, its two panels, and the ruler channel between them
+   The channel is not decoration: it is the one place a note cannot go.
+   ========================================================================== */
+
+.board {
+  flex: 1 1 auto;
+  display: flex;
+  min-height: 0;
+  background: var(--mat-deep);
+}
+
+.panel {
+  position: relative;
+  display: flex;
+  min-width: 0;
+  background:
+    linear-gradient(var(--mat-grid) 1px, transparent 1px) 0 0 / 100% 24px,
+    linear-gradient(90deg, var(--mat-grid) 1px, transparent 1px) 0 0 / 24px 100%,
+    linear-gradient(var(--mat-grid-maj) 1px, transparent 1px) 0 0 / 100% 120px,
+    linear-gradient(90deg, var(--mat-grid-maj) 1px, transparent 1px) 0 0 / 120px 100%,
+    radial-gradient(120% 90% at 50% 0%, #244447, var(--mat) 70%);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, .35) inset;
+}
+
+.panel__surface {
+  position: relative;
+  flex: 1;
+  overflow: hidden;
+  touch-action: none;
+}
+
+/* The panel's name, stamped on a plate riveted to the mat. */
+.panel__plate {
+  position: absolute;
+  z-index: 3;
+  top: 14px;
+  left: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 5px 7px 5px 11px;
+  background: linear-gradient(var(--plate), var(--plate-shade));
+  border: 1px solid #ada593;
+  border-radius: var(--radius);
+  box-shadow: var(--lift);
+  pointer-events: auto;
+}
+.panel__name {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+.panel__tally {
+  font-family: var(--face-meta);
+  font-size: 10.5px;
+  color: var(--ink-faint);
+}
+.panel__add {
+  display: grid;
+  place-items: center;
+  width: 21px; height: 21px;
+  font-size: 15px;
+  line-height: 1;
+  color: var(--ink);
+  border: 1px solid var(--plate-edge);
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, .5);
+}
+.panel__add:hover { background: var(--signal); border-color: var(--signal-deep); }
+
+.panel__empty {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  gap: 4px;
+  justify-items: center;
+  text-align: center;
+  padding: 24px;
+  color: #7fa5a4;
+  pointer-events: none;
+}
+.panel__empty strong {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: #93b9b7;
+}
+.panel__empty span { font-size: 12.5px; }
+.panel[data-populated="true"] .panel__empty { display: none; }
+
+/* The ruler channel: dead space, marked as such. */
+.channel {
+  position: relative;
+  flex: 0 0 var(--channel);
+  background: var(--mat-deep);
+  box-shadow:
+    2px 0 6px -3px rgba(0, 0, 0, .7) inset,
+   -2px 0 6px -3px rgba(0, 0, 0, .7) inset;
+}
+.channel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(233, 226, 208, .34) 0 1px,
+    transparent 1px 12px
+  );
+}
+.channel::after {
+  content: "";
+  position: absolute;
+  top: 0; bottom: 0; left: 50%;
+  width: 1px;
+  margin-left: -.5px;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(233, 226, 208, .5) 0 8px,
+    transparent 8px 16px
+  );
+}
+
+/* While a note is in hand, the channel shows it is closed. */
+.board[data-dragging="true"] .channel { background: #10201f; }
+.board[data-dragging="true"] .panel[data-target="true"] {
+  box-shadow: 0 0 0 2px var(--signal) inset;
+}
+
+@media (max-width: 720px) {
+  .board { flex-direction: column; }
+  .channel {
+    flex-basis: var(--channel);
+  }
+  .channel::before {
+    background: repeating-linear-gradient(
+      to right,
+      rgba(233, 226, 208, .34) 0 1px,
+      transparent 1px 12px
+    );
+  }
+  .channel::after {
+    top: 50%; bottom: auto; left: 0; right: 0;
+    width: auto; height: 1px;
+    margin: -.5px 0 0;
+    background: repeating-linear-gradient(
+      to right,
+      rgba(233, 226, 208, .5) 0 8px,
+      transparent 8px 16px
+    );
+  }
+}
+
+/* The board is the coordinate space a lifted note is carried in. */
+.board { position: relative; }

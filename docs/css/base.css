@@ -1,0 +1,142 @@
+/* ==========================================================================
+   base.css — design tokens, reset, shared primitives
+   QDVC Stickies. Visual direction: a self-healing cutting mat on a work
+   bench. The mat is quiet and dark; the paper is the only loud thing.
+   ========================================================================== */
+
+:root {
+  /* --- surface: the cutting mat ------------------------------------------ */
+  --mat:          #1f3a3d;
+  --mat-deep:     #16292b;
+  --mat-grid:     rgba(129, 196, 195, 0.10);
+  --mat-grid-maj: rgba(129, 196, 195, 0.18);
+
+  /* --- chrome: machined label plates ------------------------------------- */
+  --plate:        #ece7da;
+  --plate-edge:   #c6bfae;
+  --plate-shade:  #d9d3c3;
+  --ink:          #23282a;
+  --ink-soft:     #5d6669;
+  --ink-faint:    #8d9599;
+
+  /* --- signal ------------------------------------------------------------ */
+  --signal:       #f2b417;
+  --signal-deep:  #b3810a;
+  --danger:       #b3372a;
+
+  /* --- paper: sticky note stock ------------------------------------------ */
+  --paper-canary: #ffe45c;
+  --paper-guava:  #ff9e7a;
+  --paper-mint:   #a9e6a1;
+  --paper-sky:    #9bd3f5;
+  --paper-lilac:  #d6b9f5;
+  --paper-bone:   #f2ecdc;
+
+  /* --- type -------------------------------------------------------------- */
+  --face-chrome: "Optima", "Candara", "Gill Sans MT", "Trebuchet MS", "Segoe UI", sans-serif;
+  --face-meta:   ui-monospace, "SF Mono", "Cascadia Mono", Consolas, "DejaVu Sans Mono", monospace;
+  --note-face:   var(--face-chrome);
+  --note-size:   15px;
+
+  /* --- metrics ----------------------------------------------------------- */
+  --menubar-h:   30px;
+  --channel:     22px;
+  --radius:      2px;
+  --lift:        0 1px 1px rgba(0, 0, 0, .28), 0 6px 14px -6px rgba(0, 0, 0, .5);
+  --lift-high:   0 2px 3px rgba(0, 0, 0, .3), 0 22px 34px -12px rgba(0, 0, 0, .6);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: var(--mat-deep);
+  color: var(--ink);
+  font: 400 15px/1.45 var(--face-chrome);
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+}
+
+button, input, select, textarea {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+
+/* Keyboard focus is marker-yellow everywhere. Pointer focus stays quiet. */
+:focus { outline: none; }
+:focus-visible {
+  outline: 2px solid var(--signal);
+  outline-offset: 1px;
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* --- shared control primitives ------------------------------------------ */
+
+.btn {
+  font-family: var(--face-chrome);
+  font-size: 13px;
+  letter-spacing: .04em;
+  padding: 7px 14px;
+  border: 1px solid var(--plate-edge);
+  border-radius: var(--radius);
+  background: linear-gradient(var(--plate), var(--plate-shade));
+  color: var(--ink);
+}
+.btn:hover { border-color: var(--ink-faint); }
+.btn:active { background: var(--plate-shade); }
+
+.btn--primary {
+  border-color: var(--signal-deep);
+  background: linear-gradient(#f8c634, var(--signal));
+  font-weight: 600;
+}
+.btn--danger {
+  border-color: #8e2c22;
+  background: linear-gradient(#c34032, var(--danger));
+  color: #fff;
+}
+.btn--danger:hover { border-color: #6f221a; }
+
+.eyebrow {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.hint { font-size: 12.5px; color: var(--ink-soft); margin: 6px 0 0; }
+
+.visually-hidden {
+  position: absolute;
+  width: 1px; height: 1px;
+  margin: -1px; padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    transition-duration: .001ms !important;
+    animation-duration: .001ms !important;
+  }
+}

@@ -1,0 +1,147 @@
+/* ==========================================================================
+   preferences.css — master/detail settings
+   ========================================================================== */
+
+.prefs {
+  display: grid;
+  grid-template-columns: 178px 1fr;
+  min-height: 348px;
+  max-height: 70vh;
+}
+
+.prefs__master {
+  padding: 10px 8px;
+  background: #e0dac9;
+  border-right: 1px solid var(--plate-edge);
+  overflow: auto;
+}
+.prefs__master .eyebrow { display: block; padding: 4px 8px 8px; }
+
+.prefs__tab {
+  display: block;
+  width: 100%;
+  padding: 8px 10px;
+  margin-bottom: 2px;
+  font-size: 13.5px;
+  text-align: left;
+  border-radius: var(--radius);
+}
+.prefs__tab small {
+  display: block;
+  font-family: var(--face-meta);
+  font-size: 10.5px;
+  color: var(--ink-faint);
+  margin-top: 2px;
+}
+.prefs__tab:hover { background: rgba(35, 40, 42, .07); }
+.prefs__tab[aria-selected="true"] {
+  background: var(--mat);
+  color: var(--plate);
+}
+.prefs__tab[aria-selected="true"] small { color: #9fbfbe; }
+
+.prefs__detail { padding: 18px 20px; overflow: auto; }
+.prefs__pane { display: none; }
+.prefs__pane[data-active="true"] { display: block; }
+
+.prefs__heading {
+  margin: 0 0 3px;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: .03em;
+}
+.prefs__lede {
+  margin: 0 0 18px;
+  font-size: 13px;
+  color: var(--ink-soft);
+  max-width: 46ch;
+}
+
+.field { margin-bottom: 18px; }
+.field > label,
+.field > .field__label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.field select {
+  width: 100%;
+  padding: 7px 9px;
+  background: #fff;
+  border: 1px solid var(--plate-edge);
+  border-radius: var(--radius);
+}
+
+.field__row { display: flex; align-items: center; gap: 12px; }
+.field__row input[type="range"] { flex: 1; accent-color: var(--signal-deep); }
+.field__value {
+  min-width: 52px;
+  font-family: var(--face-meta);
+  font-size: 12px;
+  color: var(--ink-soft);
+}
+
+/* Live sample of the chosen note typeface, on real paper. */
+.sample {
+  padding: 14px 16px 18px;
+  background: var(--paper-canary);
+  border-radius: 1px;
+  box-shadow: var(--lift);
+  transform: rotate(-.5deg);
+  font-family: var(--note-face);
+  font-size: var(--note-size);
+  line-height: 1.4;
+  color: #2a2620;
+}
+.sample__meta {
+  display: block;
+  margin-bottom: 6px;
+  font-family: var(--face-meta);
+  font-size: 10px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: rgba(42, 38, 32, .5);
+}
+
+.slab {
+  padding: 14px 16px;
+  background: #e3ddcc;
+  border: 1px solid var(--plate-edge);
+  border-radius: var(--radius);
+  margin-bottom: 16px;
+}
+.slab--warn { border-color: #cba39c; background: #f0dfdb; }
+.slab__title {
+  margin: 0 0 4px;
+  font-size: 13.5px;
+  font-weight: 600;
+}
+.slab p { margin: 0 0 12px; font-size: 13px; color: var(--ink-soft); }
+
+.readout {
+  display: flex;
+  gap: 22px;
+  font-family: var(--face-meta);
+  font-size: 11.5px;
+  color: var(--ink-soft);
+}
+.readout div span { display: block; color: var(--ink-faint); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; }
+
+@media (max-width: 620px) {
+  .prefs { grid-template-columns: 1fr; max-height: none; }
+  .prefs__master {
+    display: flex;
+    gap: 6px;
+    border-right: 0;
+    border-bottom: 1px solid var(--plate-edge);
+    overflow-x: auto;
+  }
+  .prefs__master .eyebrow { display: none; }
+  .prefs__tab { width: auto; white-space: nowrap; margin: 0; }
+  .prefs__tab small { display: none; }
+}

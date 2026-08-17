@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>QDVC Stickies</title>
+<meta name="description" content="A mat for sticky notes: what you are doing now, and what comes later.">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/menubar.css">
+<link rel="stylesheet" href="css/board.css">
+<link rel="stylesheet" href="css/note.css">
+<link rel="stylesheet" href="css/modal.css">
+<link rel="stylesheet" href="css/preferences.css">
+</head>
+<body>
+
+<div class="app">
+
+  <!-- ===================== menu strip ===================== -->
+  <div class="menubar" id="menubar" role="menubar" aria-label="Main menu">
+    <div class="menubar__brand"><span class="menubar__mark" aria-hidden="true"></span>QDVC Stickies</div>
+
+    <div class="menu" data-menu="file">
+      <button type="button" class="menu__label" aria-haspopup="true" aria-expanded="false">File</button>
+      <ul class="menu__list" role="menu">
+        <li role="none"><button type="button" role="menuitem" class="menu__item" data-command="note.new">New note in Now<span class="menu__key" data-key="mod+shift+N"></span></button></li>
+        <li role="none"><button type="button" role="menuitem" class="menu__item" data-command="note.new.later">New note in Later<span class="menu__key"></span></button></li>
+        <li role="none"><div class="menu__sep" role="separator"></div></li>
+        <li role="none"><button type="button" role="menuitem" class="menu__item" data-command="file.import">Import&hellip;<span class="menu__key" data-key="mod+O"></span></button></li>
+        <li role="none"><button type="button" role="menuitem" class="menu__item" data-command="file.export">Export&hellip;<span class="menu__key" data-key="mod+E"></span></button></li>
+      </ul>
+    </div>
+
+    <div class="menu" data-menu="edit">
+      <button type="button" class="menu__label" aria-haspopup="true" aria-expanded="false">Edit</button>
+      <ul class="menu__list" role="menu">
+        <li role="none"><button type="button" role="menuitem" class="menu__item" data-command="edit.preferences">Preferences&hellip;<span class="menu__key" data-key="mod+,"></span></button></li>
+      </ul>
+    </div>
+
+    <div class="menu" data-menu="help">
+      <button type="button" class="menu__label" aria-haspopup="true" aria-expanded="false">Help</button>
+      <ul class="menu__list" role="menu">
+        <li role="none"><button type="button" role="menuitem" class="menu__item" data-command="help.about">About QDVC Stickies<span class="menu__key"></span></button></li>
+      </ul>
+    </div>
+
+    <div class="menubar__spacer"></div>
+    <div class="menubar__count" data-total aria-live="polite"></div>
+  </div>
+
+  <!-- ===================== the mat ===================== -->
+  <main class="board" id="board"></main>
+
+</div>
+
+<!-- ===================== Preferences ===================== -->
+<div class="scrim" id="sheet-prefs" role="dialog" aria-modal="true" aria-labelledby="prefs-title">
+  <div class="sheet">
+    <div class="sheet__bar">
+      <h2 class="sheet__title" id="prefs-title">Preferences</h2>
+      <button type="button" class="sheet__close" data-close="sheet-prefs" aria-label="Close preferences">&times;</button>
+    </div>
+
+    <div class="prefs">
+      <div class="prefs__master" role="tablist" aria-label="Preference sections">
+        <span class="eyebrow">Sections</span>
+        <button type="button" class="prefs__tab" role="tab" data-pane="notes" aria-selected="true">
+          Notes<small>Typeface, size</small>
+        </button>
+        <button type="button" class="prefs__tab" role="tab" data-pane="storage" aria-selected="false">
+          Storage<small>Saved data</small>
+        </button>
+      </div>
+
+      <div class="prefs__detail">
+
+        <section class="prefs__pane" data-pane-id="notes" data-active="true" role="tabpanel">
+          <h3 class="prefs__heading">Notes</h3>
+          <p class="prefs__lede">How the writing on every note looks. Only typefaces already installed on this device are offered, so nothing is downloaded.</p>
+
+          <div class="field">
+            <label for="pref-font">Typeface</label>
+            <select id="pref-font"></select>
+          </div>
+
+          <div class="field">
+            <label for="pref-size">Text size</label>
+            <div class="field__row">
+              <input type="range" id="pref-size" min="12" max="26" step="1">
+              <span class="field__value" data-size-value>15 px</span>
+            </div>
+          </div>
+
+          <div class="sample" aria-hidden="true">
+            <span class="sample__meta">Preview</span>
+            Draft the handover notes<br>before Thursday's review.
+          </div>
+        </section>
+
+        <section class="prefs__pane" data-pane-id="storage" role="tabpanel">
+          <h3 class="prefs__heading">Storage</h3>
+          <p class="prefs__lede">The board lives in this browser's local storage on this device. It is not sent anywhere.</p>
+
+          <div class="slab">
+            <div class="readout">
+              <div><span>Notes</span><b data-readout="notes">0</b></div>
+              <div><span>Stored</span><b data-readout="size">0 B</b></div>
+              <div><span>Last saved</span><b data-readout="saved">&mdash;</b></div>
+            </div>
+          </div>
+
+          <div class="slab">
+            <p class="slab__title">Keep a copy</p>
+            <p>Export writes a JSON file you can import into another browser, or after clearing storage.</p>
+            <button type="button" class="btn" data-action="export-from-prefs">Export board</button>
+          </div>
+
+          <div class="slab slab--warn">
+            <p class="slab__title">Clear stored data</p>
+            <p>Empties this browser's storage for QDVC Stickies and returns the board to two empty panels. There is no undo.</p>
+            <button type="button" class="btn btn--danger" data-action="clear-storage">Clear stored data&hellip;</button>
+          </div>
+        </section>
+
+      </div>
+    </div>
+
+    <div class="sheet__foot">
+      <span class="sheet__note">Changes apply as you make them.</span>
+      <button type="button" class="btn btn--primary" data-close="sheet-prefs">Done</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== Import ===================== -->
+<div class="scrim" id="sheet-import" role="dialog" aria-modal="true" aria-labelledby="import-title" data-state="ready">
+  <div class="sheet sheet--narrow">
+    <div class="sheet__bar">
+      <h2 class="sheet__title" id="import-title">Import board</h2>
+      <button type="button" class="sheet__close" data-close="sheet-import" aria-label="Close import">&times;</button>
+    </div>
+
+    <div class="sheet__body">
+      <div data-import-ready>
+        <div class="slab">
+          <p class="slab__title" data-import-file>file.json</p>
+          <div class="readout">
+            <div><span>Contains</span><b data-import-count>0 notes</b></div>
+            <div><span>Split</span><b data-import-breakdown>&mdash;</b></div>
+          </div>
+          <p class="hint">Exported <span data-import-saved>&mdash;</span></p>
+        </div>
+        <p>Replace swaps the whole board, including preferences. Merge keeps what you have and adds the incoming notes alongside it.</p>
+      </div>
+
+      <div data-import-fail>
+        <p class="slab__title">That file cannot be imported</p>
+        <p data-import-error></p>
+      </div>
+    </div>
+
+    <div class="sheet__foot">
+      <button type="button" class="btn" data-close="sheet-import">Cancel</button>
+      <button type="button" class="btn" data-import-action="merge">Merge into board</button>
+      <button type="button" class="btn btn--primary" data-import-action="replace">Replace board</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== Confirm ===================== -->
+<div class="scrim" id="sheet-confirm" role="dialog" aria-modal="true" aria-labelledby="confirm-title">
+  <div class="sheet sheet--narrow">
+    <div class="sheet__bar">
+      <h2 class="sheet__title" id="confirm-title" data-confirm-title>Confirm</h2>
+      <button type="button" class="sheet__close" data-close="sheet-confirm" aria-label="Close">&times;</button>
+    </div>
+    <div class="sheet__body"><p data-confirm-body></p></div>
+    <div class="sheet__foot">
+      <button type="button" class="btn" data-close="sheet-confirm">Cancel</button>
+      <button type="button" class="btn btn--primary" data-confirm-go>Continue</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== About ===================== -->
+<div class="scrim" id="sheet-about" role="dialog" aria-modal="true" aria-labelledby="about-title">
+  <div class="sheet sheet--narrow">
+    <div class="sheet__bar">
+      <h2 class="sheet__title" id="about-title">About</h2>
+      <button type="button" class="sheet__close" data-close="sheet-about" aria-label="Close">&times;</button>
+    </div>
+    <div class="sheet__body">
+      <p><strong>QDVC Stickies</strong> is a mat for sticky notes. Now takes a third of the mat, Later takes the rest, and notes go wherever you put them &mdash; except the marked channel down the middle.</p>
+      <p>Double-click the mat to start a note. Drag it by its paper, resize it from the bottom-right corner, and carry it across to the other panel whenever it changes hands.</p>
+      <p class="hint">Everything is kept in this browser's local storage. Use File &rarr; Export to carry the board elsewhere.</p>
+    </div>
+    <div class="sheet__foot">
+      <button type="button" class="btn btn--primary" data-close="sheet-about">Close</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<input type="file" id="import-file" accept="application/json,.json" class="visually-hidden">
+
+<script src="js/util.js"></script>
+<script src="js/catalog.js"></script>
+<script src="js/storage.js"></script>
+<script src="js/state.js"></script>
+<script src="js/modal.js"></script>
+<script src="js/notes.js"></script>
+<script src="js/board.js"></script>
+<script src="js/drag.js"></script>
+<script src="js/menubar.js"></script>
+<script src="js/preferences.js"></script>
+<script src="js/io.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

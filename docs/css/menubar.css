@@ -1,0 +1,120 @@
+/* ==========================================================================
+   menubar.css — the bench's control strip
+   ========================================================================== */
+
+.menubar {
+  position: relative;
+  z-index: 400;
+  flex: 0 0 var(--menubar-h);
+  display: flex;
+  align-items: stretch;
+  gap: 2px;
+  padding: 0 6px;
+  background: linear-gradient(var(--plate), var(--plate-shade));
+  border-bottom: 1px solid #b3ab98;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, .35) inset;
+  user-select: none;
+}
+
+.menubar__brand {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 0 12px 0 4px;
+  margin-right: 4px;
+  border-right: 1px solid var(--plate-edge);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+.menubar__mark {
+  width: 11px; height: 11px;
+  background: var(--signal);
+  border: 1px solid var(--signal-deep);
+  transform: rotate(-6deg);
+}
+
+.menu { position: relative; display: flex; }
+
+.menu__label {
+  display: flex;
+  align-items: center;
+  padding: 0 11px;
+  font-size: 13.5px;
+  letter-spacing: .02em;
+  border-radius: var(--radius);
+}
+.menu__label:hover { background: rgba(35, 40, 42, .07); }
+.menu[data-open="true"] .menu__label {
+  background: var(--mat);
+  color: var(--plate);
+}
+
+.menu__list {
+  position: absolute;
+  top: calc(100% + 1px);
+  left: 0;
+  min-width: 232px;
+  padding: 5px;
+  margin: 0;
+  list-style: none;
+  background: var(--plate);
+  border: 1px solid #a9a189;
+  border-radius: var(--radius);
+  box-shadow: var(--lift-high);
+  display: none;
+}
+.menu[data-open="true"] .menu__list { display: block; }
+
+.menu__item {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 24px;
+  width: 100%;
+  padding: 6px 10px;
+  font-size: 13.5px;
+  text-align: left;
+  border-radius: var(--radius);
+  white-space: nowrap;
+}
+.menu__item:hover,
+.menu__item:focus-visible {
+  background: var(--mat);
+  color: var(--plate);
+  outline: none;
+}
+.menu__item:hover .menu__key,
+.menu__item:focus-visible .menu__key { color: #9fbfbe; }
+
+.menu__key {
+  font-family: var(--face-meta);
+  font-size: 11px;
+  letter-spacing: .04em;
+  color: var(--ink-faint);
+}
+
+.menu__sep {
+  height: 1px;
+  margin: 5px 8px;
+  background: var(--plate-edge);
+}
+
+.menubar__spacer { flex: 1; }
+
+.menubar__count {
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+  font-family: var(--face-meta);
+  font-size: 11px;
+  letter-spacing: .06em;
+  color: var(--ink-faint);
+}
+
+@media (max-width: 520px) {
+  .menubar__brand { letter-spacing: .1em; padding-right: 8px; }
+  .menubar__count { display: none; }
+}
