@@ -158,3 +158,6 @@
 
 /* The board is the coordinate space a lifted note is carried in. */
 .board { position: relative; }
+
+/* While a note is in hand, the whole mat says so. */
+.board[data-dragging="true"], .board[data-dragging="true"] * { cursor: grabbing; }

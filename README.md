@@ -17,10 +17,10 @@ The folder is named `docs/` so the same tree can be served by GitHub Pages as-is
 | Action | How |
 | --- | --- |
 | New note | Double-click the mat, press `+` on a panel, or File → New note |
-| Move a note | Drag the paper (drag it across to the other panel to move it there) |
+| Move a note | Drag the handle bar along the top of the note; drop it on the other panel to move it there |
 | Resize a note | Drag the bottom-right corner |
-| Recolour a note | Hover the note, then use the colour button |
-| Delete a note | Hover the note, then use `×` |
+| Recolour a note | Hover the note, then use the colour button on the handle |
+| Delete a note | Hover the note, then use `×` on the handle |
 | Cancel a drag | `Esc` while still holding |
 
 Shortcuts: `Ctrl/⌘ Shift N` new note, `Ctrl/⌘ O` import, `Ctrl/⌘ E` export, `Ctrl/⌘ ,` preferences.
@@ -69,6 +69,9 @@ nudged back inside the panel if the window becomes too small to hold them.
 ```
 docs/
   index.html        markup, menus and dialogs
+  favicon.svg       the app mark: one canary sheet on the mat
+  favicon.ico       16/32/48px raster fallback for older browsers
+  apple-touch-icon.png  180px home-screen icon
   css/
     base.css        design tokens, reset, shared controls
     menubar.css     the menu strip

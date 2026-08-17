@@ -156,8 +156,10 @@
           return;
         }
 
-        /* Typing, buttons and the colour picker are not handles. */
-        if (event.target.closest('.note__text, .note__grip, .note__palette')) { return; }
+        /* Only the handle bar picks a note up, and only where it is bare:
+           the tools sitting on it do their own jobs. Anything that shows the
+           grab cursor drags, and nothing else does. */
+        if (!event.target.closest('[data-handle]') || event.target.closest('button')) { return; }
 
         event.preventDefault();
         el.setPointerCapture(event.pointerId);

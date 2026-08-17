@@ -1,6 +1,9 @@
 /* ==========================================================================
    note.css — the paper. The only saturated objects on the mat.
-   A note rests at a slight tilt and straightens the moment you pick it up.
+
+   Cursors and behaviour are kept in step: the handle bar at the top of a note
+   is the one place that shows the grab cursor, and the one place that picks the
+   note up. Everywhere else shows the cursor for what it actually does.
    ========================================================================== */
 
 .note {
@@ -9,63 +12,108 @@
   flex-direction: column;
   background: var(--paper, var(--paper-canary));
   color: #2a2620;
-  border-radius: 1px 1px 1px 1px;
+  border-radius: 1px;
   box-shadow: var(--lift);
   transform: rotate(var(--tilt, 0deg));
   transition: transform 120ms ease, box-shadow 120ms ease;
   touch-action: none;
-  cursor: grab;
+  cursor: default;
 }
 
-/* Torn top edge and a lifted bottom-right curl: paper, not a rectangle. */
-.note::before {
-  content: "";
-  position: absolute;
-  inset: 0 0 auto;
-  height: 4px;
-  background: linear-gradient(rgba(0, 0, 0, .10), transparent);
-}
+/* Torn top edge and a lifted bottom-right curl: paper, not a rectangle.
+   Neither takes pointer events, so they never swallow a grab. */
+.note::before,
 .note::after {
   content: "";
   position: absolute;
+  pointer-events: none;
+}
+.note::before {
+  inset: 0 0 auto;
+  height: 4px;
+  background: linear-gradient(rgba(0, 0, 0, .10), transparent);
+  z-index: 2;
+}
+.note::after {
   right: 0; bottom: 0;
   width: 20px; height: 20px;
   background: linear-gradient(315deg, rgba(0, 0, 0, .13), rgba(0, 0, 0, 0) 62%);
-  pointer-events: none;
+}
+
+/* A note straightens while you write on it. Beyond reading more easily, an
+   untilted note is what keeps the text caret crisp: browsers render carets
+   poorly inside a rotated element. Declared before the lifted rule below so
+   that a note in hand still wins. */
+.note:focus-within {
+  transform: rotate(0deg);
+  box-shadow: 0 1px 1px rgba(0, 0, 0, .28), 0 10px 20px -8px rgba(0, 0, 0, .55);
 }
 
 .note[data-lifted="true"] {
   transform: rotate(0deg) scale(1.022);
   box-shadow: var(--lift-high);
-  cursor: grabbing;
   z-index: 9000 !important;
 }
 
+/* --- the handle ---------------------------------------------------------- */
+
 .note__grip {
+  position: relative;
   flex: 0 0 auto;
   display: flex;
   align-items: center;
   justify-content: flex-end;
   gap: 3px;
-  height: 22px;
-  padding: 0 3px 0 8px;
-  background: rgba(0, 0, 0, .045);
+  height: 32px;
+  padding: 0 5px 0 8px;
+  background: rgba(0, 0, 0, .055);
+  border-bottom: 1px solid rgba(0, 0, 0, .07);
+  cursor: grab;
+  touch-action: none;
+}
+.note[data-lifted="true"] .note__grip { cursor: grabbing; }
+
+/* Three ruled lines, centred in the handle: the thing to grab. */
+.note__bars {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
   opacity: 0;
   transition: opacity 110ms ease;
+  pointer-events: none;
 }
-.note:hover .note__grip,
-.note:focus-within .note__grip,
-.note[data-lifted="true"] .note__grip { opacity: 1; }
+.note__bars span {
+  display: block;
+  width: 34px;
+  height: 2px;
+  border-radius: 1px;
+  background: rgba(42, 38, 32, .38);
+  box-shadow:
+     0 -6px 0 rgba(42, 38, 32, .38),
+     0  6px 0 rgba(42, 38, 32, .38);
+}
+.note:hover .note__bars,
+.note[data-lifted="true"] .note__bars { opacity: 1; }
+
+/* --- tools on the handle ------------------------------------------------- */
 
 .note__tool {
   display: grid;
   place-items: center;
-  width: 18px; height: 18px;
+  width: 20px; height: 20px;
   border-radius: 2px;
   color: rgba(42, 38, 32, .62);
   font-size: 14px;
   line-height: 1;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 110ms ease;
 }
+.note:hover .note__tool,
+.note:focus-within .note__tool,
+.note[data-lifted="true"] .note__tool { opacity: 1; }
+.note__tool:focus-visible { opacity: 1; }
 .note__tool:hover { background: rgba(0, 0, 0, .1); color: #2a2620; }
 .note__tool--kill:hover { background: var(--danger); color: #fff; }
 
@@ -77,35 +125,41 @@
   background: var(--paper);
 }
 
+/* --- the writing surface ------------------------------------------------- */
+
 .note__text {
   flex: 1;
   width: 100%;
   min-height: 0;
-  padding: 2px 12px 16px;
+  padding: 8px 12px 18px;
   background: none;
   border: 0;
   resize: none;
   font-family: var(--note-face);
   font-size: var(--note-size);
   line-height: 1.4;
-  color: inherit;
+  color: #2a2620;
+  caret-color: #2a2620;
   cursor: text;
   overflow: auto;
+  touch-action: auto;
 }
 .note__text::placeholder { color: rgba(42, 38, 32, .38); }
+.note__text::selection { background: rgba(42, 38, 32, .18); }
 
 .note__corner {
   position: absolute;
   right: 0; bottom: 0;
-  width: 18px; height: 18px;
+  width: 20px; height: 20px;
   cursor: nwse-resize;
   z-index: 2;
 }
 
-/* Colour picker, opened from the note itself. */
+/* --- colour picker, opened from the handle ------------------------------- */
+
 .note__palette {
   position: absolute;
-  top: 24px; right: 4px;
+  top: 34px; right: 4px;
   z-index: 3;
   display: none;
   grid-template-columns: repeat(3, 20px);
@@ -115,6 +169,7 @@
   border: 1px solid #a9a189;
   border-radius: var(--radius);
   box-shadow: var(--lift-high);
+  cursor: default;
 }
 .note[data-palette="true"] .note__palette { display: grid; }
 
@@ -122,10 +177,11 @@
   width: 20px; height: 20px;
   border: 1px solid rgba(0, 0, 0, .28);
   border-radius: 2px;
+  cursor: pointer;
 }
 .note__chip[aria-pressed="true"] { box-shadow: 0 0 0 2px var(--ink) inset; }
 
-/* Without a pointer that hovers, the note's tools have to stay out. */
+/* Without a pointer that hovers, the handle's markings and tools stay out. */
 @media (hover: none) {
-  .note__grip { opacity: 1; }
+  .note__bars, .note__tool { opacity: 1; }
 }

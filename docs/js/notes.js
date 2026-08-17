@@ -24,6 +24,15 @@
 
       var grip = document.createElement('div');
       grip.className = 'note__grip';
+      grip.setAttribute('data-handle', 'true');
+      grip.title = 'Drag to move this note';
+
+      /* The markings that say "pick me up here". */
+      var bars = document.createElement('div');
+      bars.className = 'note__bars';
+      bars.setAttribute('aria-hidden', 'true');
+      bars.appendChild(document.createElement('span'));
+      grip.appendChild(bars);
 
       var swatch = tool('note__swatch', 'Change paper colour', '');
       swatch.appendChild(document.createElement('span'));
